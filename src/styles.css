@@ -1,0 +1,27 @@
+body {
+  height: 100%;
+}
+
+body {
+  justify-content: center;
+  align-items: center;
+  background-color: #081424;
+}
+header {
+  font-family: Cardo, serif;
+  color: antiquewhite;
+  text-align: center;
+}
+
+footer {
+  color: antiquewhite;
+  width: 100%;
+  position: absolute;
+  text-align: center;
+  bottom: 0px;
+  height: 2.5rem;
+}
+
+.topic {
+  color: antiquewhite;
+}
