@@ -2,8 +2,9 @@
   "name": "news-snap",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
+    "start": "node server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -15,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/qcnickum/News-Snap/issues"
   },
-  "homepage": "https://github.com/qcnickum/News-Snap#readme"
+  "homepage": "https://github.com/qcnickum/News-Snap#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  }
 }
