@@ -73,7 +73,8 @@ const bubble1Style = {
   transform: `translate(-50%, -50%)`,
   cursor: "pointer",
   textAlign: "center",
-  lineHeight: String(bubble1.height)
+  lineHeight: String(bubble1.height),
+  fontSize: String(bubble1.height)
 };
 
 const bubble2Style = {
@@ -87,7 +88,8 @@ const bubble2Style = {
   transform: `translate(-50%, -50%)`,
   cursor: "pointer",
   textAlign: "center",
-  lineHeight: String(bubble2.height)
+  lineHeight: String(bubble2.height),
+  fontSize: String(bubble2.height)
 };
 
 const bubble3Style = {
@@ -101,7 +103,8 @@ const bubble3Style = {
   transform: `translate(-50%, -50%)`,
   cursor: "pointer",
   textAlign: "center",
-  lineHeight: String(bubble3.height)
+  lineHeight: String(bubble3.height),
+  fontSize: String(bubble3.height)
 };
 
 const bubble4Style = {
@@ -115,7 +118,8 @@ const bubble4Style = {
   transform: `translate(-50%, -50%)`,
   cursor: "pointer",
   textAlign: "center",
-  lineHeight: String(bubble4.height)
+  lineHeight: String(bubble4.height),
+  fontSize: String(bubble4.height)
 };
 
 const bubble5Style = {
@@ -129,7 +133,8 @@ const bubble5Style = {
   transform: `translate(-50%, -50%)`,
   cursor: "pointer",
   textAlign: "center",
-  lineHeight: String(bubble5.height)
+  lineHeight: String(bubble5.height),
+  fontSize: String(bubble5.height)
 };
 
 class Bubbles extends React.Component {
