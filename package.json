@@ -1,7 +1,7 @@
 {
   "name": "news-snap",
   "version": "0.1.0",
-  "description": "",
+  "description": "IE3 news aggregator project",
   "main": "server/index.js",
   "scripts": {
     "start": "node server",
