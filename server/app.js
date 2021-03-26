@@ -1,5 +1,4 @@
-const express = require('express')
-const app = express()
+const app = require('express')()
 const admin = require('firebase-admin');
 
 admin.initializeApp({
@@ -9,7 +8,7 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-app.get('/api', (req, res) => {
+app.get('/api/update', (req, res) => {
   res.json({ 'message': 'Hello from the server' })
 })
 
