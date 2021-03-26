@@ -24,7 +24,7 @@ npm start
 In a separate terminal from the API server, start the UI:
 
 ```bash
-# Always change directory, first
+# First, switch to the frontend directory
 cd frontend
 
 # Initial setup
