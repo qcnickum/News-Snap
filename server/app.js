@@ -8,3 +8,9 @@ admin.initializeApp({
 });
 
 const db = admin.firestore();
+
+app.get('/', (req, res) => {
+  res.send('Hello world')
+})
+
+module.exports = app
