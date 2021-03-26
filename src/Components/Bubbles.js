@@ -8,7 +8,6 @@ class bubble {
     this.color = color;
     this.width = width;
     this.height = height;
-    this.position = "absolute";
     this.topic = topic;
   }
 }
