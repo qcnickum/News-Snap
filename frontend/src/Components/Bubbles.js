@@ -1,4 +1,8 @@
 import React from "react";
+import {Link} from 'react-router-dom';
+
+import Footer from "./Footer";
+import Header from "./Header";
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // defines the color, width, and height of a bubble.
@@ -56,7 +60,7 @@ let bubble3 = new bubble("orange", "100px", "100px", "Storms");
 let bubble4 = new bubble("purple", "100px", "100px", "Election");
 let bubble5 = new bubble("green", "100px", "100px", "Apple");
 
-var numMentions = [7, 11, 8, 10, 4];
+var numMentions = [7, 20, 8, 10, 4];
 
 setSize(numMentions);
 
@@ -138,51 +142,26 @@ const bubble5Style = {
 };
 
 class Bubbles extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { isActive: true };
-  }
-
-  handleShow = () => {
-    this.setState({
-      isActive: true
-    });
-  };
-
-  handleHide = () => {
-    this.setState({
-      isActive: false
-    });
-  };
-
   render() {
     return (
       <div>
-        {this.state.isActive && (
-          <div style={bubble1Style} onClick={this.handleHide}>
+        <Header />
+          <Link style={bubble1Style} to="/Sources1Table">
             <p className="topic">{bubble1.topic}</p>
-          </div>
-        )}
-        {this.state.isActive && (
-          <div style={bubble2Style} onClick={this.handleHide}>
+          </Link>
+          <Link style={bubble2Style} to="/Sources2Table">
             <p className="topic">{bubble2.topic}</p>
-          </div>
-        )}
-        {this.state.isActive && (
-          <div style={bubble3Style} onClick={this.handleHide}>
+          </Link>
+          <Link style={bubble3Style} to="/Sources3Table">
             <p className="topic">{bubble3.topic}</p>
-          </div>
-        )}
-        {this.state.isActive && (
-          <div style={bubble4Style} onClick={this.handleHide}>
+          </Link>
+          <Link style={bubble4Style} to="/Sources4Table">
             <p className="topic">{bubble4.topic}</p>
-          </div>
-        )}
-        {this.state.isActive && (
-          <div style={bubble5Style} onClick={this.handleHide}>
+          </Link>
+          <Link style={bubble5Style} to="/Sources5Table">
             <p className="topic">{bubble5.topic}</p>
-          </div>
-        )}
+          </Link>
+        <Footer />
       </div>
     );
   }
