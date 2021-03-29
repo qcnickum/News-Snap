@@ -1,5 +1,6 @@
-const app = require('express')()
+const app = require('express')();
 const admin = require('firebase-admin');
+const schedule = require('node-schedule');
 
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
@@ -8,7 +9,11 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
-app.get('/api/update', (req, res) => {
+const populateDatabase = schedule.scheduleJob('0 0,6,12,18 * * *', () => {
+  
+})
+
+app.get('/api', (req, res) => {
   res.json({ 'message': 'Hello from the server' })
 })
 
