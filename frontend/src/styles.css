@@ -5,16 +5,17 @@ body {
 body {
   justify-content: center;
   align-items: center;
-  background-color: #081424;
+  background-color: #274E68;
 }
 header {
-  font-family: Cardo, serif;
+  font-family: 'Playfair Display', serif;
   color: antiquewhite;
   text-align: center;
 }
 
 footer {
-  color: antiquewhite;
+  font-family: 'Playfair Display', serif;
+  color: white;
   width: 100%;
   position: absolute;
   text-align: center;
@@ -23,7 +24,7 @@ footer {
 }
 
 .topic {
-  color: antiquewhite;
+  color: white;
   font-size: 15%;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Playfair Display', serif;
 }

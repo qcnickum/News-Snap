@@ -54,13 +54,13 @@ function setSize(numMentions) {
   bubble5.height = String(percentages[4]) + "vmin";
 }
 
-let bubble1 = new bubble("red", "100px", "100px", "Gamestop");
-let bubble2 = new bubble("blue", "100px", "100px", "Stocks");
-let bubble3 = new bubble("orange", "100px", "100px", "Storms");
-let bubble4 = new bubble("purple", "100px", "100px", "Election");
-let bubble5 = new bubble("green", "100px", "100px", "Apple");
+let bubble1 = new bubble("#F44854", "100px", "100px", "Gamestop");
+let bubble2 = new bubble("#629ED4", "100px", "100px", "Stocks");
+let bubble3 = new bubble("#F88034", "100px", "100px", "Storms");
+let bubble4 = new bubble("#A473B5", "100px", "100px", "Election");
+let bubble5 = new bubble("#77C77E", "100px", "100px", "Apple");
 
-var numMentions = [7, 20, 8, 10, 4];
+var numMentions = [18, 17, 15, 10, 10];
 
 setSize(numMentions);
 
