@@ -8,12 +8,15 @@ admin.initializeApp({
 
 const db = admin.firestore();
 
+// Populates the database with articles pulled from the "everything" News API endpoint.
+// Makes four requests to the API; each one covers six hours of the day.
 async function populateForDay() {
   // select a day to query articles for
   // format: year-month-day
-  const day = '2021-03-29';
+  const currDay = new Date();
+  const formattedDay = currDay.toISOString().slice(0, 10);
 
-  console.log(`fetching everything for ${day}`);
+  console.log(`fetching everything for ${formattedDay}`);
 
   // split 24 hour day into 4 parts (6 hour chunks)
   // populate database with articles from each part of the day
@@ -24,8 +27,8 @@ async function populateForDay() {
     params: {
       sources:
         'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters',
-      from: `${day}T00:00:00`,
-      to: `${day}T05:59:59`,
+      from: `${formattedDay}T00:00:00`,
+      to: `${formattedDay}T05:59:59`,
       pageSize: 100,
     },
   });
@@ -55,8 +58,8 @@ async function populateForDay() {
     params: {
       sources:
         'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters',
-      from: `${day}T06:00:00`,
-      to: `${day}T11:59:59`,
+      from: `${formattedDay}T06:00:00`,
+      to: `${formattedDay}T11:59:59`,
       pageSize: 100,
     },
   });
@@ -86,8 +89,8 @@ async function populateForDay() {
     params: {
       sources:
         'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters',
-      from: `${day}T12:00:00`,
-      to: `${day}T17:59:59`,
+      from: `${formattedDay}T12:00:00`,
+      to: `${formattedDay}T17:59:59`,
       pageSize: 100,
     },
   });
@@ -117,8 +120,8 @@ async function populateForDay() {
     params: {
       sources:
         'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters',
-      from: `${day}T18:00:00`,
-      to: `${day}T23:59:59`,
+      from: `${formattedDay}T18:00:00`,
+      to: `${formattedDay}T23:59:59`,
       pageSize: 100,
     },
   });
@@ -144,4 +147,14 @@ async function populateForDay() {
   console.log('done fetching');
 }
 
-module.exports = populateForDay
+// Deletes all of the articles stored in the "everything" collection in the database.
+async function deleteAllArticles() {
+  console.log('deleting all articles');
+  const snapshot = await db.collection('everything').get();
+  snapshot.forEach((doc) => {
+    db.collection('everything').doc(doc.id).delete();
+  });
+  console.log('done deleting');
+}
+
+module.exports = { populateForDay, deleteAllArticles }

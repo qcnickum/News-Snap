@@ -1,10 +1,10 @@
 const app = require('express')();
 const schedule = require('node-schedule');
-const populateForDay = require('./utils/firebase');
+const db = require('./utils/firebase');
 
-const populateDatabase = schedule.scheduleJob('0 0,6,12,18 * * *', () => {
-  // delete old articles?
-  populateForDay();
+const populateDatabase = schedule.scheduleJob('0 0 * * *', () => {
+  db.deleteAllArticles();
+  db.populateForDay();
 })
 
 app.get('/api', (req, res) => {
