@@ -1,4 +1,8 @@
 import React from "react";
+import {Link} from 'react-router-dom';
+
+import Footer from "./Footer";
+import Header from "./Header";
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // defines the color, width, and height of a bubble.
@@ -50,13 +54,13 @@ function setSize(numMentions) {
   bubble5.height = String(percentages[4]) + "vmin";
 }
 
-let bubble1 = new bubble("red", "100px", "100px", "Gamestop");
-let bubble2 = new bubble("blue", "100px", "100px", "Stocks");
-let bubble3 = new bubble("orange", "100px", "100px", "Storms");
-let bubble4 = new bubble("purple", "100px", "100px", "Election");
-let bubble5 = new bubble("green", "100px", "100px", "Apple");
+let bubble1 = new bubble("#F44854", "100px", "100px", "Gamestop");
+let bubble2 = new bubble("#629ED4", "100px", "100px", "Stocks");
+let bubble3 = new bubble("#F88034", "100px", "100px", "Storms");
+let bubble4 = new bubble("#A473B5", "100px", "100px", "Election");
+let bubble5 = new bubble("#77C77E", "100px", "100px", "Apple");
 
-var numMentions = [7, 11, 8, 10, 4];
+var numMentions = [18, 17, 15, 10, 10];
 
 setSize(numMentions);
 
@@ -73,7 +77,8 @@ const bubble1Style = {
   transform: `translate(-50%, -50%)`,
   cursor: "pointer",
   textAlign: "center",
-  lineHeight: String(bubble1.height)
+  lineHeight: String(bubble1.height),
+  fontSize: String(bubble1.height)
 };
 
 const bubble2Style = {
@@ -87,7 +92,8 @@ const bubble2Style = {
   transform: `translate(-50%, -50%)`,
   cursor: "pointer",
   textAlign: "center",
-  lineHeight: String(bubble2.height)
+  lineHeight: String(bubble2.height),
+  fontSize: String(bubble2.height)
 };
 
 const bubble3Style = {
@@ -101,7 +107,8 @@ const bubble3Style = {
   transform: `translate(-50%, -50%)`,
   cursor: "pointer",
   textAlign: "center",
-  lineHeight: String(bubble3.height)
+  lineHeight: String(bubble3.height),
+  fontSize: String(bubble3.height)
 };
 
 const bubble4Style = {
@@ -115,7 +122,8 @@ const bubble4Style = {
   transform: `translate(-50%, -50%)`,
   cursor: "pointer",
   textAlign: "center",
-  lineHeight: String(bubble4.height)
+  lineHeight: String(bubble4.height),
+  fontSize: String(bubble4.height)
 };
 
 const bubble5Style = {
@@ -129,55 +137,31 @@ const bubble5Style = {
   transform: `translate(-50%, -50%)`,
   cursor: "pointer",
   textAlign: "center",
-  lineHeight: String(bubble5.height)
+  lineHeight: String(bubble5.height),
+  fontSize: String(bubble5.height)
 };
 
 class Bubbles extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { isActive: true };
-  }
-
-  handleShow = () => {
-    this.setState({
-      isActive: true
-    });
-  };
-
-  handleHide = () => {
-    this.setState({
-      isActive: false
-    });
-  };
-
   render() {
     return (
       <div>
-        {this.state.isActive && (
-          <div style={bubble1Style} onClick={this.handleHide}>
+        <Header />
+          <Link style={bubble1Style} to="/Sources1Table">
             <p className="topic">{bubble1.topic}</p>
-          </div>
-        )}
-        {this.state.isActive && (
-          <div style={bubble2Style} onClick={this.handleHide}>
+          </Link>
+          <Link style={bubble2Style} to="/Sources2Table">
             <p className="topic">{bubble2.topic}</p>
-          </div>
-        )}
-        {this.state.isActive && (
-          <div style={bubble3Style} onClick={this.handleHide}>
+          </Link>
+          <Link style={bubble3Style} to="/Sources3Table">
             <p className="topic">{bubble3.topic}</p>
-          </div>
-        )}
-        {this.state.isActive && (
-          <div style={bubble4Style} onClick={this.handleHide}>
+          </Link>
+          <Link style={bubble4Style} to="/Sources4Table">
             <p className="topic">{bubble4.topic}</p>
-          </div>
-        )}
-        {this.state.isActive && (
-          <div style={bubble5Style} onClick={this.handleHide}>
+          </Link>
+          <Link style={bubble5Style} to="/Sources5Table">
             <p className="topic">{bubble5.topic}</p>
-          </div>
-        )}
+          </Link>
+        <Footer />
       </div>
     );
   }
