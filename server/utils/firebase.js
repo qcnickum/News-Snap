@@ -26,7 +26,7 @@ async function populateForDay() {
     },
     params: {
       sources:
-        'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters',
+        'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters,fox-news,the-hill,the-huffington-post,msnbc',
       from: `${formattedDay}T00:00:00`,
       to: `${formattedDay}T05:59:59`,
       pageSize: 100,
@@ -57,7 +57,7 @@ async function populateForDay() {
     },
     params: {
       sources:
-        'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters',
+        'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters,fox-news,the-hill,the-huffington-post,msnbc',
       from: `${formattedDay}T06:00:00`,
       to: `${formattedDay}T11:59:59`,
       pageSize: 100,
@@ -88,7 +88,7 @@ async function populateForDay() {
     },
     params: {
       sources:
-        'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters',
+        'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters,fox-news,the-hill,the-huffington-post,msnbc',
       from: `${formattedDay}T12:00:00`,
       to: `${formattedDay}T17:59:59`,
       pageSize: 100,
@@ -119,7 +119,7 @@ async function populateForDay() {
     },
     params: {
       sources:
-        'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters',
+        'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters,fox-news,the-hill,the-huffington-post,msnbc',
       from: `${formattedDay}T18:00:00`,
       to: `${formattedDay}T23:59:59`,
       pageSize: 100,
