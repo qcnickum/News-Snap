@@ -162,4 +162,5 @@ async function deleteAllArticles() {
   console.log('done deleting');
 }
 
-module.exports = { populateForDay, deleteAllArticles }
+populateForDay();
+// deleteAllArticles();
