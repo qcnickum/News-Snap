@@ -155,11 +155,77 @@ async function populateForDay() {
 // Deletes all of the articles stored in the "everything" collection in the database.
 async function deleteAllArticles() {
   console.log('deleting all articles');
+
   const snapshot = await db.collection('everything').get();
   snapshot.forEach((doc) => {
     db.collection('everything').doc(doc.id).delete();
   });
+
   console.log('done deleting');
 }
 
-module.exports = { populateForDay, deleteAllArticles }
+async function analyzePopularity() {
+  console.log('analyzing popularity of articles in "everything"');
+
+  const words = getArticleWords();
+  return words;
+}
+
+//
+// HELPER FUNCTIONS
+//
+
+async function getHeadlines(collection) {
+  const result = [];
+  const snapshot = await db.collection(collection).get();
+  snapshot.forEach((doc) => {
+    result.push(doc.data().title);
+  });
+  return result;
+}
+
+async function getDescriptions(collection) {
+  const result = [];
+  const snapshot = await db.collection(collection).get();
+  snapshot.forEach((doc) => {
+    result.push(doc.data().description);
+  });
+  return result;
+}
+
+function splitWords(words) {
+  const result = [];
+  words.forEach((chunk) => {
+    result.push(chunk.split(' '));
+  });
+  return result.flat();
+}
+
+const filterChar = (char) => {
+  const regex = new RegExp(/[\w\d'.,-<>]/);
+  return regex.test(char);
+};
+
+const cleanWord = (word) => {
+  return word.split('').filter(filterChar).join('').toLowerCase();
+};
+
+const filterWholeWord = (word) => {
+  const regex = new RegExp(/(^[\w\d]+['.,-]*[\w\d]+$|[\w\d]+$)/i);
+  return regex.test(word);
+};
+
+const cleanWords = (words) => words.filter(filterWholeWord);
+
+async function getArticleWords() {
+  const headlines = await getHeadlines('everything');
+  const descriptions = await getDescriptions('everything');
+  let words = []
+  words.push(splitWords(headlines))
+  words.push(splitWords(descriptions))
+  words = words.flat()
+  const clean = cleanWords(words.map(cleanWord));
+  return clean;
+}
+
+module.exports = { db, analyzePopularity, populateForDay, deleteAllArticles }

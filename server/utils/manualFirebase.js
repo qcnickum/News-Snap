@@ -14,8 +14,9 @@ const db = admin.firestore();
 async function populateForDay() {
   // select a day to query articles for
   // format: year-month-day
-  const currDay = new Date();
-  const formattedDay = currDay.toISOString().slice(0, 10);
+  // const currDay = new Date();
+  // const formattedDay = currDay.toISOString().slice(0, 10);
+  const formattedDay = '2021-04-3';
 
   console.log(`fetching everything for ${formattedDay}`);
 
@@ -162,5 +163,5 @@ async function deleteAllArticles() {
   console.log('done deleting');
 }
 
-populateForDay();
-// deleteAllArticles();
+// populateForDay();
+deleteAllArticles();
