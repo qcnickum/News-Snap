@@ -14,10 +14,12 @@ const populateDatabase = schedule.scheduleJob('0 0 * * *', () => {
   db.populateForDay();
 })
 
+// Placeholder message for the base URI for the API.
 app.get('/api', (req, res) => {
   res.json({ 'message': 'This is the News Snap API.' })
 })
 
+// Returns all of the articles stored in the database.
 app.get('/api/articles', async (req, res) => {
   const snapshot = await firebase.db.collection('everything').get();
   if (snapshot.empty) {
@@ -27,13 +29,20 @@ app.get('/api/articles', async (req, res) => {
     snapshot.forEach((doc) => {
       articles.push(doc.data());
     })
-    console.log(articles);
     res.send(articles);
   }
 })
 
-app.get('/api/popularity', async (req, res) => {
+// Returns all of the words in the articles stored in the database
+// and the number of times they occur.
+app.get('/api/articles/count-words', async (req, res) => {
   res.send(await firebase.analyzePopularity());
+})
+
+// Returns the top topics, drawn from
+// the articles stored in the database.
+app.get('/api/top-topics', async (req, res) => {
+
 })
 
 module.exports = app

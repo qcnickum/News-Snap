@@ -1,6 +1,8 @@
 const config = require('./config');
 const admin = require('firebase-admin');
 const axios = require('axios');
+const sw = require('stopword');
+const stopwordList = require('./stopwordList');
 
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
@@ -14,8 +16,8 @@ const db = admin.firestore();
 async function populateForDay() {
   // select a day to query articles for
   // format: year-month-day
-  const currDay = new Date();
-  const formattedDay = currDay.toISOString().slice(0, 10);
+  const today = new Date();
+  const formattedDay = `${today.getFullYear()}-${today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1}-${today.getDate() + 1 < 10 ? `0${today.getDate() + 1}` : today.getDate() + 1}`
 
   console.log(`fetching everything for ${formattedDay}`);
 
@@ -167,8 +169,29 @@ async function deleteAllArticles() {
 async function analyzePopularity() {
   console.log('analyzing popularity of articles in "everything"');
 
-  const words = getArticleWords();
-  return words;
+  const words = await getArticleWords();
+  const uniqueWords = Array.from(new Set(sw.removeStopwords(words, stopwordList)));
+  let wordCount = new Map();
+
+  for (const uniqueWord of uniqueWords) {
+    for (const word of words) {
+      if (uniqueWord === word) {
+        wordCount.set(
+          uniqueWord,
+          wordCount.get(uniqueWord) ? wordCount.get(uniqueWord) + 1 : 1
+        );
+      }
+    }
+  }
+
+  wordCount = Array.from(wordCount.entries().sort((a, b) => b[1] - a[1]))
+
+  wordCount.forEach((word) => {
+    db.collection('words').add({
+      word: word[0],
+      count: word[1],
+    });
+  });
 }
 
 //
@@ -212,6 +235,7 @@ const cleanWord = (word) => {
 
 const filterWholeWord = (word) => {
   const regex = new RegExp(/(^[\w\d]+['.,-]*[\w\d]+$|[\w\d]+$)/i);
+  word = word.replace( /(<([^>]+)>)/ig, '');
   return regex.test(word);
 };
 
