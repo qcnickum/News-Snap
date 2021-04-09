@@ -5,6 +5,7 @@
 // https://firebase.google.com/docs/hosting/serverless-overview
 // Alternatively, Heroku could be used.
 
+require('express-async-errors');
 const app = require('express')();
 const schedule = require('node-schedule');
 const firebase = require('./utils/firebase');

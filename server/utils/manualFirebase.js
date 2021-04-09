@@ -14,9 +14,8 @@ const db = admin.firestore();
 async function populateForDay() {
   // select a day to query articles for
   // format: year-month-day
-  // const currDay = new Date();
-  // const formattedDay = currDay.toISOString().slice(0, 10);
-  const formattedDay = '2021-04-4';
+  const today = new Date();
+  const formattedDay = `${today.getFullYear()}-${today.getMonth() + 1< 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1}-${today.getDate() < 10 ? `0${today.getDate()}` : today.getDate()}`
 
   console.log(`fetching everything for ${formattedDay}`);
 
@@ -163,15 +162,5 @@ async function deleteAllArticles() {
   console.log('done deleting');
 }
 
-async function deleteWordCounts() {
-  console.log('deleting word counts');
-  const snapshot = await db.collection('words').get();
-  snapshot.forEach((doc) => {
-    db.collection('words').doc(doc.id).delete();
-  });
-  console.log('done deleting');
-}
-
-// populateForDay();
-deleteWordCounts();
+populateForDay();
 // deleteAllArticles();

@@ -184,42 +184,63 @@ async function analyzePopularity() {
     }
   }
 
-  wordCount = Array.from(wordCount.entries().sort((a, b) => b[1] - a[1]))
+  wordCount = Array.from(wordCount.entries()).sort((a, b) => b[1] - a[1])
 
-  wordCount.forEach((word) => {
-    db.collection('words').add({
-      word: word[0],
-      count: word[1],
-    });
-  });
+  return wordCount;
 }
 
 //
 // HELPER FUNCTIONS
 //
 
-async function getHeadlines(collection) {
-  const result = [];
-  const snapshot = await db.collection(collection).get();
-  snapshot.forEach((doc) => {
-    result.push(doc.data().title);
-  });
-  return result;
-}
+// async function getHeadlines(collection) {
+//   const result = [];
+//   const snapshot = await db.collection(collection).get();
+//   snapshot.forEach((doc) => {
+//     result.push(doc.data().title);
+//   });
+//   return result;
+// }
 
-async function getDescriptions(collection) {
-  const result = [];
-  const snapshot = await db.collection(collection).get();
+// async function getDescriptions(collection) {
+//   const result = [];
+//   const snapshot = await db.collection(collection).get();
+//   snapshot.forEach((doc) => {
+//     result.push(doc.data().description);
+//   });
+//   return result;
+// }
+
+// async function getContents(collection) {
+//   const result = [];
+//   const snapshot = await db.collection(collection).get();
+//   snapshot.forEach((doc) => {
+//     result.push(doc.data().content);
+//   });
+//   return result;
+// }
+
+async function getFromDatabase() {
+  const snapshot = await db.collection('everything').get();
+  const words = [];
   snapshot.forEach((doc) => {
-    result.push(doc.data().description);
+    words.push(doc.data().title);
   });
-  return result;
+  snapshot.forEach((doc) => {
+    words.push(doc.data().description);
+  });
+  snapshot.forEach((doc) => {
+    words.push(doc.data().content);
+  });
+  return words;
 }
 
 function splitWords(words) {
   const result = [];
   words.forEach((chunk) => {
-    result.push(chunk.split(' '));
+    if (chunk) {
+      result.push(chunk.split(' '));
+    }
   });
   return result.flat();
 }
@@ -242,12 +263,8 @@ const filterWholeWord = (word) => {
 const cleanWords = (words) => words.filter(filterWholeWord);
 
 async function getArticleWords() {
-  const headlines = await getHeadlines('everything');
-  const descriptions = await getDescriptions('everything');
-  let words = []
-  words.push(splitWords(headlines))
-  words.push(splitWords(descriptions))
-  words = words.flat()
+  let words = await getFromDatabase();
+  words = splitWords(words).flat();
   const clean = cleanWords(words.map(cleanWord));
   return clean;
 }
