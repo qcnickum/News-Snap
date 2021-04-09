@@ -9,9 +9,7 @@ require('express-async-errors');
 const express = require('express');
 const app = express();
 const schedule = require('node-schedule');
-const axios = require('axios')
 const firebase = require('./utils/firebase');
-const { NEWS_API_KEY } = require('./utils/config');
 
 app.use(express.static('../frontend/build'))
 
