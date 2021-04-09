@@ -6,11 +6,14 @@
 // Alternatively, Heroku could be used.
 
 require('express-async-errors');
-const app = require('express')();
+const express = require('express');
+const app = express();
 const schedule = require('node-schedule');
 const axios = require('axios')
 const firebase = require('./utils/firebase');
 const { NEWS_API_KEY } = require('./utils/config');
+
+app.use(express.static('../frontend/build'))
 
 const populateDatabase = schedule.scheduleJob('0 0 * * *', () => {
   firebase.db.deleteAllArticles();
