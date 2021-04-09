@@ -8,11 +8,13 @@
 require('express-async-errors');
 const app = require('express')();
 const schedule = require('node-schedule');
+const axios = require('axios')
 const firebase = require('./utils/firebase');
+const { NEWS_API_KEY } = require('./utils/config');
 
 const populateDatabase = schedule.scheduleJob('0 0 * * *', () => {
-  db.deleteAllArticles();
-  db.populateForDay();
+  firebase.db.deleteAllArticles();
+  firebase.db.populateForDay();
 })
 
 // Placeholder message for the base URI for the API.
@@ -37,13 +39,23 @@ app.get('/api/articles', async (req, res) => {
 // Returns all of the words in the articles stored in the database
 // and the number of times they occur.
 app.get('/api/articles/count-words', async (req, res) => {
-  res.send(await firebase.analyzePopularity());
+  res.send(await firebase.countWords());
 })
 
-// Returns the top topics, drawn from
-// the articles stored in the database.
-app.get('/api/top-topics', async (req, res) => {
+// Returns the top topics, drawn from the articles stored in the database.
+app.get('/api/articles/top-topics', async (req, res) => {
+  const NUM_TOPICS = 10;
+  const wordCounts = await firebase.countWords();
+  let topics = [];
+  for (let i = 0; i < NUM_TOPICS; i++) {
+    topics.push(wordCounts[i][0]);
+  }
+  res.send(topics)
+})
 
+// Returns the articles queried by the top topics.
+app.get('/api/articles/top-articles', async (req, res) => {
+  
 })
 
 module.exports = app

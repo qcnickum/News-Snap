@@ -1,4 +1,4 @@
-const config = require('./config');
+const { NEWS_API_KEY } = require('./config');
 const admin = require('firebase-admin');
 const axios = require('axios');
 const sw = require('stopword');
@@ -17,7 +17,7 @@ async function populateForDay() {
   // select a day to query articles for
   // format: year-month-day
   const today = new Date();
-  const formattedDay = `${today.getFullYear()}-${today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1}-${today.getDate() + 1 < 10 ? `0${today.getDate() + 1}` : today.getDate() + 1}`
+  const formattedDay = `${today.getFullYear()}-${today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1}-${today.getDate() < 10 ? `0${today.getDate()}` : today.getDate()}`
 
   console.log(`fetching everything for ${formattedDay}`);
 
@@ -25,7 +25,7 @@ async function populateForDay() {
   // populate database with articles from each part of the day
   const res1 = await axios.get(`https://newsapi.org/v2/everything`, {
     headers: {
-      'X-Api-Key': config.NEWS_API_KEY,
+      'X-Api-Key': NEWS_API_KEY,
     },
     params: {
       sources:
@@ -57,7 +57,7 @@ async function populateForDay() {
 
   const res2 = await axios.get(`https://newsapi.org/v2/everything`, {
     headers: {
-      'X-Api-Key': config.NEWS_API_KEY,
+      'X-Api-Key': NEWS_API_KEY,
     },
     params: {
       sources:
@@ -89,7 +89,7 @@ async function populateForDay() {
 
   const res3 = await axios.get(`https://newsapi.org/v2/everything`, {
     headers: {
-      'X-Api-Key': config.NEWS_API_KEY,
+      'X-Api-Key': NEWS_API_KEY,
     },
     params: {
       sources:
@@ -121,7 +121,7 @@ async function populateForDay() {
 
   const res4 = await axios.get(`https://newsapi.org/v2/everything`, {
     headers: {
-      'X-Api-Key': config.NEWS_API_KEY,
+      'X-Api-Key': NEWS_API_KEY,
     },
     params: {
       sources:
@@ -166,8 +166,8 @@ async function deleteAllArticles() {
   console.log('done deleting');
 }
 
-async function analyzePopularity() {
-  console.log('analyzing popularity of articles in "everything"');
+async function countWords() {
+  console.log('counting words in articles in "everything"');
 
   const words = await getArticleWords();
   const uniqueWords = Array.from(new Set(sw.removeStopwords(words, stopwordList)));
@@ -192,33 +192,6 @@ async function analyzePopularity() {
 //
 // HELPER FUNCTIONS
 //
-
-// async function getHeadlines(collection) {
-//   const result = [];
-//   const snapshot = await db.collection(collection).get();
-//   snapshot.forEach((doc) => {
-//     result.push(doc.data().title);
-//   });
-//   return result;
-// }
-
-// async function getDescriptions(collection) {
-//   const result = [];
-//   const snapshot = await db.collection(collection).get();
-//   snapshot.forEach((doc) => {
-//     result.push(doc.data().description);
-//   });
-//   return result;
-// }
-
-// async function getContents(collection) {
-//   const result = [];
-//   const snapshot = await db.collection(collection).get();
-//   snapshot.forEach((doc) => {
-//     result.push(doc.data().content);
-//   });
-//   return result;
-// }
 
 async function getFromDatabase() {
   const snapshot = await db.collection('everything').get();
@@ -269,4 +242,4 @@ async function getArticleWords() {
   return clean;
 }
 
-module.exports = { db, analyzePopularity, populateForDay, deleteAllArticles }
+module.exports = { db, countWords, populateForDay, deleteAllArticles }

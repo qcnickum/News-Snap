@@ -1,4 +1,4 @@
-const config = require('./config');
+const { NEWS_API_KEY } = require('./config');
 const admin = require('firebase-admin');
 const axios = require('axios');
 
@@ -23,7 +23,7 @@ async function populateForDay() {
   // populate database with articles from each part of the day
   const res1 = await axios.get(`https://newsapi.org/v2/everything`, {
     headers: {
-      'X-Api-Key': config.NEWS_API_KEY,
+      'X-Api-Key': NEWS_API_KEY,
     },
     params: {
       sources:
@@ -55,7 +55,7 @@ async function populateForDay() {
 
   const res2 = await axios.get(`https://newsapi.org/v2/everything`, {
     headers: {
-      'X-Api-Key': config.NEWS_API_KEY,
+      'X-Api-Key': NEWS_API_KEY,
     },
     params: {
       sources:
@@ -87,7 +87,7 @@ async function populateForDay() {
 
   const res3 = await axios.get(`https://newsapi.org/v2/everything`, {
     headers: {
-      'X-Api-Key': config.NEWS_API_KEY,
+      'X-Api-Key': NEWS_API_KEY,
     },
     params: {
       sources:
@@ -119,7 +119,7 @@ async function populateForDay() {
 
   const res4 = await axios.get(`https://newsapi.org/v2/everything`, {
     headers: {
-      'X-Api-Key': config.NEWS_API_KEY,
+      'X-Api-Key': NEWS_API_KEY,
     },
     params: {
       sources:
