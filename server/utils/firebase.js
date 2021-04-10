@@ -189,6 +189,56 @@ async function countWords() {
   return wordCount;
 }
 
+//Populates the database with topics and article pairs
+async function setCurrentTopics(){
+  const NUM_TOPICS = 10;
+  const wordCounts = await countWords();
+  let topics = [];
+  for (let i = 0; i < NUM_TOPICS; i++) {
+    topics.push(wordCounts[i][0]);
+  }
+  
+  let queryArticles = await queryTopTopics(topics, NUM_TOPICS);
+
+  queryArticles.forEach( (topicArticles, index) => {
+      var topic = topics[index];
+      
+      var rightArticles = [];
+      var leftArticles = [];
+      var centerArticles = []
+
+      topicArticles.forEach( (article) => {
+        switch(article.source.id){
+          case "the-washington-post":
+          case "the-wall-street-journal":
+          case "nbc-news":
+          case "abc-news":
+          case "associated-press":
+          case "bbc-news":
+            centerArticles.push(article)
+            break;
+          case "fox-news":
+          case "the-hill":
+            rightArticles.push(article);
+            break;
+          case "msnbc":
+          case "the-huffington-post":
+            leftArticles.push(article);
+            break;
+        }
+      })
+      db.collection("current-topics").add(
+          {
+              topic: topic,
+              right: rightArticles,
+              left: leftArticles,
+              center: centerArticles
+          }
+      );
+  });
+}
+
+
 //
 // HELPER FUNCTIONS
 //
@@ -242,4 +292,42 @@ async function getArticleWords() {
   return clean;
 }
 
-module.exports = { db, countWords, populateForDay, deleteAllArticles }
+//Uses news api to search for articles based on top topics
+async function queryTopTopics(topics, topicCount){
+  
+  const today = new Date();
+  const day = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+  let articles = [];
+
+  for (i = 0; i < topicCount; i++)
+  {
+      var topic = topics[i];
+
+      const res = await axios.get(
+          "https://newsapi.org/v2/everything",
+          {
+          headers: {
+              'X-Api-Key': process.env.NEWS_API_KEY,
+          },
+          params: {
+              q: topic,
+              from: day,
+              sources: 'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters,fox-news,the-hill,the-huffington-post,msnbc',
+              sortBy: "relevancy",
+          }
+      }); 
+      if(res.data.status == "ok")
+      {
+          articles.push(res.data.articles);
+      }
+      else{
+          console.log(res.data.code);
+          console.log("error articles not found");
+          return;
+      }
+  }
+  return articles;
+}
+
+module.exports = { db, countWords, populateForDay, deleteAllArticles, setCurrentTopics }

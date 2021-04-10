@@ -2,6 +2,7 @@ const { NEWS_API_KEY } = require('./config');
 const admin = require('firebase-admin');
 const axios = require('axios');
 
+
 admin.initializeApp({
   credential: admin.credential.applicationDefault(),
   databaseURL: 'https://ie3-news-aggregator-305102.firebaseio.com',
@@ -152,6 +153,115 @@ async function populateForDay() {
   console.log('done fetching');
 }
 
+async function countWords() {
+  console.log('counting words in articles in "everything"');
+
+  const words = await getArticleWords();
+  const uniqueWords = Array.from(new Set(sw.removeStopwords(words, stopwordList)));
+  let wordCount = new Map();
+
+  for (const uniqueWord of uniqueWords) {
+    for (const word of words) {
+      if (uniqueWord === word) {
+        wordCount.set(
+          uniqueWord,
+          wordCount.get(uniqueWord) ? wordCount.get(uniqueWord) + 1 : 1
+        );
+      }
+    }
+  }
+
+  wordCount = Array.from(wordCount.entries()).sort((a, b) => b[1] - a[1])
+
+  return wordCount;
+}
+
+//Populates the database with topics and article pairs
+async function setCurrentTopics(){
+  const NUM_TOPICS = 10;
+  const wordCounts = await countWords();
+  let topics = [];
+  for (let i = 0; i < NUM_TOPICS; i++) {
+    topics.push(wordCounts[i][0]);
+  }
+  
+  let queryArticles = await queryTopTopics(topics, NUM_TOPICS);
+
+  queryArticles.forEach( (topicArticles, index) => {
+      var topic = topics[index];
+      
+      var rightArticles = [];
+      var leftArticles = [];
+      var centerArticles = []
+
+      topicArticles.forEach( (article) => {
+        switch(article.source.id){
+          case "the-washington-post":
+          case "the-wall-street-journal":
+          case "nbc-news":
+          case "abc-news":
+          case "associated-press":
+          case "bbc-news":
+            centerArticles.push(article)
+            break;
+          case "fox-news":
+          case "the-hill":
+            rightArticles.push(article);
+            break;
+          case "msnbc":
+          case "the-huffington-post":
+            leftArticles.push(article);
+            break;
+        }
+      })
+      db.collection("current-topics").add(
+          {
+              topic: topic,
+              right: rightArticles,
+              left: leftArticles,
+              center: centerArticles
+          }
+      );
+  });
+}
+
+async function queryTopTopics(topics, topicCount){
+  
+  const today = new Date();
+  const day = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+  let articles = [];
+
+  for (i = 0; i < topicCount; i++)
+  {
+      var topic = topics[i];
+
+      const res = await axios.get(
+          "https://newsapi.org/v2/everything",
+          {
+          headers: {
+              'X-Api-Key': process.env.NEWS_API_KEY,
+          },
+          params: {
+              q: topic,
+              from: day,
+              sources: 'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters,fox-news,the-hill,the-huffington-post,msnbc',
+              sortBy: "relevancy",
+          }
+      }); 
+      if(res.data.status == "ok")
+      {
+          articles.push(res.data.articles);
+      }
+      else{
+          console.log(res.data.code);
+          console.log("error articles not found");
+          return;
+      }
+  }
+  return articles;
+}
+
 // Deletes all of the articles stored in the "everything" collection in the database.
 async function deleteAllArticles() {
   console.log('deleting all articles');
@@ -162,5 +272,55 @@ async function deleteAllArticles() {
   console.log('done deleting');
 }
 
-populateForDay();
+async function getFromDatabase() {
+  const snapshot = await db.collection('everything').get();
+  const words = [];
+  snapshot.forEach((doc) => {
+    words.push(doc.data().title);
+  });
+  snapshot.forEach((doc) => {
+    words.push(doc.data().description);
+  });
+  snapshot.forEach((doc) => {
+    words.push(doc.data().content);
+  });
+  return words;
+}
+
+function splitWords(words) {
+  const result = [];
+  words.forEach((chunk) => {
+    if (chunk) {
+      result.push(chunk.split(' '));
+    }
+  });
+  return result.flat();
+}
+
+const filterChar = (char) => {
+  const regex = new RegExp(/[\w\d'.,-<>]/);
+  return regex.test(char);
+};
+
+const cleanWord = (word) => {
+  return word.split('').filter(filterChar).join('').toLowerCase();
+};
+
+const filterWholeWord = (word) => {
+  const regex = new RegExp(/(^[\w\d]+['.,-]*[\w\d]+$|[\w\d]+$)/i);
+  word = word.replace( /(<([^>]+)>)/ig, '');
+  return regex.test(word);
+};
+
+const cleanWords = (words) => words.filter(filterWholeWord);
+
+async function getArticleWords() {
+  let words = await getFromDatabase();
+  words = splitWords(words).flat();
+  const clean = cleanWords(words.map(cleanWord));
+  return clean;
+}
+
+setCurrentTopics();
+//populateForDay();
 // deleteAllArticles();
