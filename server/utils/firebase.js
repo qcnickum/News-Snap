@@ -200,7 +200,9 @@ async function setCurrentTopics(){
   
   let queryArticles = await queryTopTopics(topics, NUM_TOPICS);
 
-  queryArticles.forEach( (topicArticles, index) => {
+
+  try {
+    queryArticles.forEach( (topicArticles, index) => {
       var topic = topics[index];
       
       var rightArticles = [];
@@ -239,6 +241,23 @@ async function setCurrentTopics(){
           }
       );
   });
+  console.log("finished updating topics")
+  } catch (error) {
+    console.log(error)
+    console.log("failed to update topics")
+  }
+  
+}
+
+async function deleteCurrentTopics() {
+  console.log('deleting current topics');
+
+  const snapshot = await db.collection('current-topics').get();
+  snapshot.forEach((doc) => {
+    db.collection('current-topics').doc(doc.id).delete();
+  });
+
+  console.log('done deleting');
 }
 
 
@@ -333,4 +352,11 @@ async function queryTopTopics(topics, topicCount){
   return articles;
 }
 
-module.exports = { db, countWords, populateForDay, deleteAllArticles, setCurrentTopics }
+async function printTopics(){
+  const snapshot = await db.collection("current-topics").get();
+  snapshot.forEach((doc) => {
+      console.log(doc.id, '=>', doc.data());
+    });
+}
+
+module.exports = { db, countWords, populateForDay, deleteAllArticles, setCurrentTopics, deleteCurrentTopics }
