@@ -65,4 +65,13 @@ app.get('/api/articles/top-articles', async (req, res) => {
   
 })
 
+// Let the React app handling routing for all remaining requests.
+app.get('*', function(req, res) {
+  res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'), {
+    headers: {
+      'Content-Security-Policy': "default-src 'self'"
+    }
+  });
+});
+
 module.exports = app
