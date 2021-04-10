@@ -1,6 +1,7 @@
 import React from "react";
 import BootstrapTable from 'react-bootstrap-table-next';
 import "../styles.css";
+import axios from "axios"
 
 import Footer from "./Footer";
 import Header from "./Header";
