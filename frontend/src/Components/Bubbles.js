@@ -66,7 +66,7 @@ setSize(numMentions);
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-const bubble1Style = {
+let bubble1Style = {
   backgroundColor: bubble1.color,
   width: bubble1.width,
   height: bubble1.height,
@@ -78,10 +78,11 @@ const bubble1Style = {
   cursor: "pointer",
   textAlign: "center",
   lineHeight: String(bubble1.height),
-  fontSize: String(bubble1.height)
+  fontSize: String(bubble1.height),
+  textDecoration: "none"
 };
 
-const bubble2Style = {
+let bubble2Style = {
   backgroundColor: bubble2.color,
   width: bubble2.width,
   height: bubble2.height,
@@ -93,10 +94,12 @@ const bubble2Style = {
   cursor: "pointer",
   textAlign: "center",
   lineHeight: String(bubble2.height),
-  fontSize: String(bubble2.height)
+  fontSize: String(bubble2.height),
+  textDecoration: "none"
+  
 };
 
-const bubble3Style = {
+let bubble3Style = {
   backgroundColor: bubble3.color,
   width: bubble3.width,
   height: bubble3.height,
@@ -108,10 +111,11 @@ const bubble3Style = {
   cursor: "pointer",
   textAlign: "center",
   lineHeight: String(bubble3.height),
-  fontSize: String(bubble3.height)
+  fontSize: String(bubble3.height),
+  textDecoration: "none"
 };
 
-const bubble4Style = {
+let bubble4Style = {
   backgroundColor: bubble4.color,
   width: bubble4.width,
   height: bubble4.height,
@@ -123,10 +127,11 @@ const bubble4Style = {
   cursor: "pointer",
   textAlign: "center",
   lineHeight: String(bubble4.height),
-  fontSize: String(bubble4.height)
+  fontSize: String(bubble4.height),
+  textDecoration: "none"
 };
 
-const bubble5Style = {
+let bubble5Style = {
   backgroundColor: bubble5.color,
   width: bubble5.width,
   height: bubble5.height,
@@ -138,7 +143,8 @@ const bubble5Style = {
   cursor: "pointer",
   textAlign: "center",
   lineHeight: String(bubble5.height),
-  fontSize: String(bubble5.height)
+  fontSize: String(bubble5.height),
+  textDecoration: "none"
 };
 
 class Bubbles extends React.Component {

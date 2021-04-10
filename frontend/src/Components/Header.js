@@ -1,10 +1,13 @@
 import React from "react";
+import {Link} from 'react-router-dom';
 
 class Header extends React.Component {
   render() {
     return (
       <header>
-        <h1>News Snap</h1>
+        <Link style={{ textDecoration: 'none' }} to="/">
+          <h1 className="headerStyle">News Snap</h1>
+        </Link>
       </header>
     );
   }

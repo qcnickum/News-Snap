@@ -15,7 +15,8 @@ async function createLL1 () {
       throw 'res not defined';
     }
   }
-// add headers if needed 
+
+  // add headers if needed 
 //data.left = getLL1(res) || data.left = {res.X} (depending on what I'm obtaining)
 // else throw error
 //
@@ -35,7 +36,7 @@ const data = [
    dataField: 'left',
    text: 'Left-Leaning',
    headerStyle: { backgroundColor: '#1167b1', color: 'antiquewhite' },
-   style: { backgroundColor: '#090911'}
+   //style: { backgroundColor: '#090911'}
  }, {
    dataField: 'center',
    text: 'Center',
@@ -45,7 +46,7 @@ const data = [
    dataField: 'right',
    text: 'Right-Leaning',
    headerStyle: { backgroundColor: '#ff4d4d', color: 'antiquewhite' },
-   style: { backgroundColor: '#090911'}
+   style: { backgroundColor: '#090911',}
  }];
 
  class Sources1Table extends React.Component {
@@ -56,7 +57,7 @@ const data = [
          <Header />
 
         <p className="Table-header"></p>
-        <BootstrapTable keyField='left' data={ data } columns={ columns } />
+        <BootstrapTable className="table" striped hover keyField='left' data={ data } columns={ columns }/>
 
         <Footer />
        </div>
