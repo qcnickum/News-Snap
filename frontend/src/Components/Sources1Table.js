@@ -35,18 +35,15 @@ const data = [
  const columns = [{
    dataField: 'left',
    text: 'Left-Leaning',
-   headerStyle: { backgroundColor: '#1167b1', color: 'antiquewhite' },
-   //style: { backgroundColor: '#090911'}
+   headerStyle: { backgroundColor: '#1167b1', color: 'antiquewhite' }
  }, {
    dataField: 'center',
    text: 'Center',
-   headerStyle: { backgroundColor: '#7a52aa', color: 'antiquewhite' },
-   style: { backgroundColor: '#090911'}
+   headerStyle: { backgroundColor: '#7a52aa', color: 'antiquewhite' }
  }, {
    dataField: 'right',
    text: 'Right-Leaning',
-   headerStyle: { backgroundColor: '#ff4d4d', color: 'antiquewhite' },
-   style: { backgroundColor: '#090911',}
+   headerStyle: { backgroundColor: '#ff4d4d', color: 'antiquewhite' }
  }];
 
  class Sources1Table extends React.Component {
