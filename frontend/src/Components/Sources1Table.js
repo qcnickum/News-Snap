@@ -7,7 +7,7 @@ import Header from "./Header";
 
 async function createLL1 () {
   const res = await axios.get('https://api.cryptonator.com/api/ticker/btc-usd')
-  if (variableName != null) {
+  if (res != null) {
     console.log(`${res.base}`);
     data.left = res.base;
   }
