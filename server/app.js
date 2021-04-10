@@ -14,7 +14,7 @@ const firebase = require('./utils/firebase');
 const cors = require('cors')
 app.use(cors())
 
-app.use(express.static('frontend/build'))
+app.use(express.static('./frontend/build'))
 
 const populateDatabase = schedule.scheduleJob('0 0 * * *', () => {
   firebase.db.deleteAllArticles();
@@ -59,6 +59,7 @@ app.get('/api/articles/top-topics', async (req, res) => {
 
 // Returns the articles queried by the top topics.
 // Format as JS object for each topic with fields "left," "center," and "right."
+// Five articles for each bias linked to topic name and word count for the topic.
 app.get('/api/articles/top-articles', async (req, res) => {
   
 })
