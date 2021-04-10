@@ -230,9 +230,12 @@ async function setCurrentTopics(){
       db.collection("current-topics").add(
           {
               topic: topic,
-              right: rightArticles,
-              left: leftArticles,
-              center: centerArticles
+              popularity: wordCounts[index][1],
+              articles: {
+                right: rightArticles,
+                left: leftArticles,
+                center: centerArticles
+              }
           }
       );
   });

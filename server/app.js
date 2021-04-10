@@ -56,7 +56,16 @@ app.get('/api/articles/top-topics', async (req, res) => {
 
 // Returns the articles queried by the top topics.
 app.get('/api/articles/top-articles', async (req, res) => {
-  
+  const snapshot = await firebase.db.collection('current-topics').get();
+  if(snapshot.empty) {
+    res.status(404).end()
+  } else {
+    const articles = [];
+    snapshot.forEach((doc) => {
+      articles.push(doc.data());
+    })
+    res.send(articles);
+  }
 })
 
 module.exports = app
