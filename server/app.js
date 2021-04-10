@@ -11,7 +11,10 @@ const app = express();
 const schedule = require('node-schedule');
 const firebase = require('./utils/firebase');
 
-app.use(express.static('../frontend/build'))
+const cors = require('cors')
+app.use(cors())
+
+// app.use(express.static('../frontend/build'))
 
 const populateDatabase = schedule.scheduleJob('0 0 * * *', () => {
   firebase.db.deleteAllArticles();
@@ -55,6 +58,7 @@ app.get('/api/articles/top-topics', async (req, res) => {
 })
 
 // Returns the articles queried by the top topics.
+// Format as JS object for each topic with fields "left," "center," and "right."
 app.get('/api/articles/top-articles', async (req, res) => {
   
 })
