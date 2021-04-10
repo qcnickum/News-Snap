@@ -8,13 +8,14 @@
 require('express-async-errors');
 const express = require('express');
 const app = express();
+const path = require('path');
 const schedule = require('node-schedule');
 const firebase = require('./utils/firebase');
 
 const cors = require('cors')
 app.use(cors())
 
-app.use(express.static('./frontend/build'))
+app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 
 const populateDatabase = schedule.scheduleJob('0 0 * * *', () => {
   firebase.db.deleteAllArticles();
