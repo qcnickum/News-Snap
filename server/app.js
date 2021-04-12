@@ -16,11 +16,7 @@ const cors = require('cors')
 app.use(cors())
 
 // Priority serve any static files.
-if (process.env.NODE_ENV === 'production') {
-  app.use('/', express.static('frontend/build'))
-} else {
-  app.use(express.static(path.resolve(__dirname, '../frontend/build')));
-}
+app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 
 const populateDatabase = schedule.scheduleJob('0 0 * * *', () => {
   firebase.db.deleteAllArticles();
@@ -70,9 +66,9 @@ app.get('/api/articles/top-articles', async (req, res) => {
   
 })
 
-  // All remaining requests return the React app, so it can handle routing.
-app.get('*', function(request, response) {
-  response.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
+// All remaining requests return the React app, so it can handle routing.
+app.get('*', function(req, res) {
+  res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
 });
 
 module.exports = app
