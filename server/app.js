@@ -15,7 +15,7 @@ const firebase = require('./utils/firebase');
 const cors = require('cors')
 app.use(cors())
 
-app.use(express.static(path.resolve(__dirname, '../frontend/build')));
+app.use(express.static(path.join(__dirname, '../frontend/build')));
 
 const populateDatabase = schedule.scheduleJob('0 0 * * *', () => {
   firebase.db.deleteAllArticles();
