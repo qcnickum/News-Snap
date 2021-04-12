@@ -15,11 +15,8 @@ const firebase = require('./utils/firebase');
 const cors = require('cors')
 app.use(cors())
 
-if (__dirname.slice(-6) === '/server') { // for production
-  app.use(express.static(path.join(__dirname, 'frontend/build')))
-} else { // for development
-  app.use(express.static(path.join(__dirname, '../frontend/build')))
-}
+// Priority serve any static files.
+app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 
 const populateDatabase = schedule.scheduleJob('0 0 * * *', () => {
   firebase.db.deleteAllArticles();
@@ -68,5 +65,10 @@ app.get('/api/articles/top-topics', async (req, res) => {
 app.get('/api/articles/top-articles', async (req, res) => {
   
 })
+
+  // All remaining requests return the React app, so it can handle routing.
+app.get('*', function(request, response) {
+  response.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
+});
 
 module.exports = app
