@@ -16,7 +16,11 @@ const cors = require('cors')
 app.use(cors())
 
 // Priority serve any static files.
-app.use(express.static(path.resolve(__dirname, '../frontend/build')));
+if (process.env.NODE_ENV === 'production') {
+  app.use('/', express.static('frontend/build'))
+} else {
+  app.use(express.static(path.resolve(__dirname, '../frontend/build')));
+}
 
 const populateDatabase = schedule.scheduleJob('0 0 * * *', () => {
   firebase.db.deleteAllArticles();
