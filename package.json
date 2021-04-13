@@ -1,11 +1,12 @@
 {
   "name": "news-snap",
   "version": "0.1.0",
-  "description": "",
+  "description": "IE3 news aggregator project",
   "main": "server/index.js",
   "scripts": {
     "start": "node server",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "cd frontend && npm run build && cd .. && git add . && git commit -m \"build:ui\" && git push heroku server:main"
   },
   "repository": {
     "type": "git",
@@ -18,9 +19,14 @@
   },
   "homepage": "https://github.com/qcnickum/News-Snap#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "firebase-admin": "^9.5.0"
+    "express-async-errors": "^3.1.1",
+    "firebase-admin": "^9.5.0",
+    "node-schedule": "^2.0.0",
+    "stopword": "^1.0.7"
   }
 }
