@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "cd frontend && npm run build && cd .. && git add . && git commit -m \"build:ui\" && git push heroku server:main"
+    "build:ui": "cd frontend && npm install && npm run build",
+    "deploy": "npm run build:ui && cd .. && git add . && git commit -m \"build:ui\" && git push heroku main"
   },
   "repository": {
     "type": "git",
