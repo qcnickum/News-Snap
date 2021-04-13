@@ -17,7 +17,7 @@ async function populateForDay() {
   // select a day to query articles for
   // format: year-month-day
   const today = new Date();
-  const formattedDay = `${today.getFullYear()}-${today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1}-${today.getDate() < 10 ? `0${today.getDate()}` : today.getDate()}`
+  const formattedDay = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
 
   console.log(`fetching everything for ${formattedDay}`);
 
@@ -189,6 +189,117 @@ async function countWords() {
   return wordCount;
 }
 
+//Populates the database with topics and article pairs
+async function setCurrentTopics(){
+  const NUM_TOPICS = 10;
+  const wordCounts = await countWords();
+  let topics = [];
+  for (let i = 0; i < NUM_TOPICS; i++) {
+    topics.push(wordCounts[i][0]);
+  }
+  
+  let queryArticles = await queryTopTopics(topics, NUM_TOPICS);
+
+
+  try {
+    queryArticles.forEach( (topicArticles, index) => {
+      var topic = topics[index];
+      
+      var rightArticles = [];
+      var leftArticles = [];
+      var centerArticles = [];
+
+      var rightCount = new Map();
+      var leftCount = new Map();
+      var centerCount = new Map();
+
+      topicArticles.forEach( (article) => {
+        switch(article.source.id){
+          case "the-washington-post":
+          case "the-wall-street-journal":
+          case "associated-press":
+          case "bbc-news": 
+          case "axios":
+          case "reuters":
+            if(centerCount.has(article.source.id)){
+              centerCount.set(article.source.id, centerCount.get(article.source.id) + 1)
+            } 
+            else {
+              centerCount.set(article.source.id, 1)
+            }
+
+            if(centerCount.get(article.source.id) < 3) {
+              centerArticles.push(article)
+            }
+            
+            break;
+          case "fox-news":
+          case "the-hill":
+          case "the-american-conservative":
+          case "national-review":
+          case "the-washington-times":
+            if(rightCount.has(article.source.id)){
+              rightCount.set(article.source.id, rightCount.get(article.source.id) + 1)
+            } 
+            else {
+              rightCount.set(article.source.id, 1)
+            }
+            
+            if(rightCount.get(article.source.id) < 3) {
+              rightArticles.push(article);
+            }
+            
+            break;
+          case "msnbc":
+          case "the-huffington-post":
+          case "nbc-news":
+          case "abc-news":
+          case "bloomberg":
+          case "cnn":
+            if(leftCount.has(article.source.id)){
+              leftCount.set(article.source.id, leftCount.get(article.source.id) + 1)
+            } 
+            else {
+              leftCount.set(article.source.id, 1)
+            }
+            
+            if(leftCount.get(article.source.id) < 3) {
+              leftArticles.push(article);
+            }
+            break;
+        }
+      })
+      db.collection("current-topics").add(
+          {
+              topic: topic,
+              popularity: wordCounts[index][1],
+              articles: {
+                right: rightArticles,
+                left: leftArticles,
+                center: centerArticles
+              }
+          }
+      );
+  });
+  console.log("finished updating topics")
+  } catch (error) {
+    console.log(error)
+    console.log("failed to update topics")
+  }
+}
+
+async function deleteCurrentTopics() {
+  console.log('deleting current topics');
+
+  const snapshot = await db.collection('current-topics').get();
+  snapshot.forEach((doc) => {
+    db.collection('current-topics').doc(doc.id).delete();
+  });
+
+  console.log('done deleting');
+}
+
+
 //
 // HELPER FUNCTIONS
 //
@@ -242,4 +353,56 @@ async function getArticleWords() {
   return clean;
 }
 
-module.exports = { db, countWords, populateForDay, deleteAllArticles }
+//Uses news api to search for articles based on top topics
+async function queryTopTopics(topics, topicCount){
+  
+  const today = new Date();
+  const day = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+
+  let articles = [];
+  for (i = 0; i < topicCount; i++)
+  {
+      var topic = topics[i];
+      const res = await axios.get(
+          "https://newsapi.org/v2/everything",
+          {
+          headers: {
+              'X-Api-Key': process.env.NEWS_API_KEY,
+          },
+          params: {
+              q: topic,
+              from: day,
+              sources: 'the-washington-post,the-wall-street-journal,nbc-news,abc-news,associated-press,bbc-news,reuters,fox-news,the-hill,the-huffington-post,msnbc,vice-news,national-review,the-american-conservative,cnn,bloomberg,axios,reuters,the-washington-times',
+              pageSize: 100,
+              sortBy: "relevancy",
+          }
+      }); 
+      if(res.data.status == "ok")
+      {
+          articles.push(res.data.articles);
+      }
+      else{
+          console.log(res.data.code);
+          console.log("error articles not found");
+          return;
+      }
+  }
+  return articles;
+}
+
+async function printTopics(){
+  const snapshot = await db.collection("current-topics").get();
+  snapshot.forEach((doc) => {
+      console.log(doc.data().topic, ' right =>', doc.data().articles.right);
+      console.log(doc.data().topic, ' center =>', doc.data().articles.center);
+      console.log(doc.data().topic, ' left =>', doc.data().articles.left);
+    });
+}
+
+// populateForDay();
+// deleteAllArticles();
+// setCurrentTopics();
+// printTopics();
+// deleteCurrentTopics();
+
+module.exports = { db, countWords, populateForDay, deleteAllArticles, setCurrentTopics, deleteCurrentTopics }

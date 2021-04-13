@@ -1,10 +1,3 @@
-// TODO: Look into building a REST API with firebase
-// that can be accessed by the web app.
-// With Google Cloud Functions, the express app will likely be moved
-// into one index.js file contained in a functions folder.
-// https://firebase.google.com/docs/hosting/serverless-overview
-// Alternatively, Heroku could be used.
-
 require('express-async-errors');
 const express = require('express');
 const app = express();
@@ -63,7 +56,16 @@ app.get('/api/articles/top-topics', async (req, res) => {
 // Format as JS object for each topic with fields "left," "center," and "right."
 // Five articles for each bias linked to topic name and word count for the topic.
 app.get('/api/articles/top-articles', async (req, res) => {
-  
+  const snapshot = await firebase.db.collection('current-topics').get();
+  if(snapshot.empty) {
+    res.status(404).end()
+  } else {
+    const articles = [];
+    snapshot.forEach((doc) => {
+      articles.push(doc.data());
+    })
+    res.send(articles);
+  }
 })
 
 // All remaining requests return the React app, so it can handle routing.
