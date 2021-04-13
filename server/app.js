@@ -1,10 +1,3 @@
-// TODO: Look into building a REST API with firebase
-// that can be accessed by the web app.
-// With Google Cloud Functions, the express app will likely be moved
-// into one index.js file contained in a functions folder.
-// https://firebase.google.com/docs/hosting/serverless-overview
-// Alternatively, Heroku could be used.
-
 require('express-async-errors');
 const express = require('express');
 const app = express();

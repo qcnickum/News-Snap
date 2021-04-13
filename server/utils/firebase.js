@@ -17,7 +17,7 @@ async function populateForDay() {
   // select a day to query articles for
   // format: year-month-day
   const today = new Date();
-  const formattedDay = `${today.getFullYear()}-${today.getMonth() + 1 < 10 ? `0${today.getMonth() + 1}` : today.getMonth() + 1}-${today.getDate() < 10 ? `0${today.getDate()}` : today.getDate()}`
+  const formattedDay = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
 
   console.log(`fetching everything for ${formattedDay}`);
 
@@ -286,7 +286,6 @@ async function setCurrentTopics(){
     console.log(error)
     console.log("failed to update topics")
   }
-  
 }
 
 async function deleteCurrentTopics() {
@@ -361,11 +360,9 @@ async function queryTopTopics(topics, topicCount){
   const day = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
   let articles = [];
-
   for (i = 0; i < topicCount; i++)
   {
       var topic = topics[i];
-
       const res = await axios.get(
           "https://newsapi.org/v2/everything",
           {
@@ -402,8 +399,10 @@ async function printTopics(){
     });
 }
 
-//setCurrentTopics();
-//printTopics();
-//deleteCurrentTopics();
+// populateForDay();
+// deleteAllArticles();
+// setCurrentTopics();
+// printTopics();
+// deleteCurrentTopics();
 
 module.exports = { db, countWords, populateForDay, deleteAllArticles, setCurrentTopics, deleteCurrentTopics }
