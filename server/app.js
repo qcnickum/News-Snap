@@ -54,7 +54,7 @@ app.get('/api/articles/top-topics', async (req, res) => {
 
 // Returns the articles queried by the top topics.
 // Format as JS object for each topic with fields "left," "center," and "right."
-// Five articles for each bias linked to topic name and word count for the topic.
+// Articles for each bias linked to topic name and word count for the topic.
 app.get('/api/articles/top-articles', async (req, res) => {
   const snapshot = await firebase.db.collection('current-topics').get();
   if(snapshot.empty) {
