@@ -7,10 +7,13 @@ body {
   align-items: center;
   background-color: #0a0a23;
 }
-.headerStyle {
-  font-family: 'Playfair Display', serif;
-  color: antiquewhite;
-  text-align: center;
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -2%;
+  width: 15%;
+  height: 15%;
 }
 
 footer {
