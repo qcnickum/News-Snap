@@ -38,6 +38,10 @@ footer {
   background-color: #090911;
   }
 
-  .styledLinks {
-    text-decoration: none;
-  }
+td {
+  color: white;
+}
+
+.styledLinks {
+  text-decoration: none;
+}
