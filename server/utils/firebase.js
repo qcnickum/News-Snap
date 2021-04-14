@@ -401,7 +401,7 @@ async function printTopics(){
 
 // populateForDay();
 // deleteAllArticles();
-setCurrentTopics();
+// setCurrentTopics();
 // printTopics();
 // deleteCurrentTopics();
 

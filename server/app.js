@@ -68,10 +68,6 @@ app.get('/api/articles/top-articles', async (req, res) => {
   }
 })
 
-app.get('/api/topics/:id', async (req, res) => {
-  
-})
-
 // All remaining requests return the React app, so it can handle routing.
 app.get('*', function(req, res) {
   res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
