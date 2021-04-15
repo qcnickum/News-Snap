@@ -8,14 +8,26 @@ import Header from "./Header";
 const columns = [{
   dataField: 'left',
   text: 'Left-Leaning',
+  formatter: (cell) => (
+    <div>
+      <a target="_blank" rel="noreferrer" href={cell}> {cell} </a>
+    </div>),
   headerStyle: { backgroundColor: '#1167b1', color: 'antiquewhite' }
 }, {
   dataField: 'center',
   text: 'Center',
+  formatter: (cell) => (
+    <div>
+      <a target="_blank" rel="noreferrer" href={cell}> {cell} </a>
+    </div>),
   headerStyle: { backgroundColor: '#7a52aa', color: 'antiquewhite' }
 }, {
   dataField: 'right',
   text: 'Right-Leaning',
+  formatter: (cell) => (
+    <div>
+      <a target="_blank" rel="noreferrer" href={cell}> {cell} </a>
+    </div>),
   headerStyle: { backgroundColor: '#ff4d4d', color: 'antiquewhite' }
 }];
 
